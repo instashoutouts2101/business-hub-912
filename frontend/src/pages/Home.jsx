@@ -60,99 +60,41 @@ export default function Home() {
                 </div>
 
                 <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-24 pb-24 lg:pt-36 lg:pb-32">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-                        <div className="lg:col-span-8 animate-fade-up">
-                            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#00C805] border border-[#2A2E39] bg-[#131722]/70 px-3 py-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#00C805] animate-pulse" />
-                                Markets open · Live advisory
-                            </div>
-                            <h1 className="mt-6 font-display font-black text-4xl sm:text-5xl lg:text-7xl leading-[0.95] tracking-tighter text-white">
-                                Financial strategy,
-                                <br />
-                                <span className="text-[#26A69A]">engineered</span> like a
-                                <br />
-                                trading terminal.
-                            </h1>
-                            <p className="mt-6 text-base sm:text-lg text-[#8A919E] max-w-2xl leading-relaxed">
-                                Globen Solutions helps investors and business
-                                owners turn capital into a compounding
-                                engine — with disciplined portfolios, tax-aware
-                                planning and always-on market intelligence.
-                            </p>
-
-                            <div className="mt-10 flex flex-wrap gap-4">
-                                <Link
-                                    to="/services"
-                                    data-testid="hero-cta-services"
-                                    className="btn-sharp inline-flex items-center gap-2 bg-[#00C805] hover:bg-[#00E006] text-black font-semibold px-6 py-3.5"
-                                >
-                                    Explore Services
-                                    <ArrowRight className="w-4 h-4" />
-                                </Link>
-                                <Link
-                                    to="/contact"
-                                    data-testid="hero-cta-contact"
-                                    className="btn-sharp inline-flex items-center gap-2 border border-[#2A2E39] hover:border-[#26A69A] bg-[#131722] text-white font-semibold px-6 py-3.5"
-                                >
-                                    Talk to an advisor
-                                </Link>
-                            </div>
+                    <div className="max-w-4xl animate-fade-up">
+                        <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#00C805] border border-[#2A2E39] bg-[#131722]/70 px-3 py-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#00C805] animate-pulse" />
+                            Markets open · Live advisory
                         </div>
+                        <h1 className="mt-6 font-display font-black text-4xl sm:text-5xl lg:text-7xl leading-[0.95] tracking-tighter text-white">
+                            Financial strategy,
+                            <br />
+                            <span className="text-[#26A69A]">engineered</span> like a
+                            <br />
+                            trading terminal.
+                        </h1>
+                        <p className="mt-6 text-base sm:text-lg text-[#8A919E] max-w-2xl leading-relaxed">
+                            Globen Solutions helps investors and business
+                            owners turn capital into a compounding
+                            engine — with disciplined portfolios, tax-aware
+                            planning and always-on market intelligence.
+                        </p>
 
-                        {/* Mini chart card */}
-                        <div className="lg:col-span-4 animate-fade-up delay-2">
-                            <div className="border border-[#2A2E39] bg-[#131722]/80 backdrop-blur-md p-6">
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <div className="text-xs uppercase tracking-widest text-[#8A919E]">
-                                            Model portfolio
-                                        </div>
-                                        <div className="mt-1 font-display text-2xl font-extrabold text-white">
-                                            GLOBEN-100
-                                        </div>
-                                    </div>
-                                    <span className="font-mono-num text-[#00C805] text-sm">
-                                        ▲ 12.42%
-                                    </span>
-                                </div>
-
-                                {/* SVG sparkline */}
-                                <svg viewBox="0 0 300 100" className="w-full mt-6 h-24">
-                                    <defs>
-                                        <linearGradient id="spark" x1="0" x2="0" y1="0" y2="1">
-                                            <stop offset="0%" stopColor="#00C805" stopOpacity="0.5" />
-                                            <stop offset="100%" stopColor="#00C805" stopOpacity="0" />
-                                        </linearGradient>
-                                    </defs>
-                                    <path
-                                        d="M0,80 L25,72 L50,74 L75,60 L100,66 L125,50 L150,55 L175,42 L200,48 L225,30 L250,36 L275,22 L300,18 L300,100 L0,100 Z"
-                                        fill="url(#spark)"
-                                    />
-                                    <path
-                                        d="M0,80 L25,72 L50,74 L75,60 L100,66 L125,50 L150,55 L175,42 L200,48 L225,30 L250,36 L275,22 L300,18"
-                                        fill="none"
-                                        stroke="#00C805"
-                                        strokeWidth="1.6"
-                                    />
-                                </svg>
-
-                                <div className="mt-4 grid grid-cols-3 gap-3 text-center">
-                                    {[
-                                        { l: "1M", v: "+2.1%" },
-                                        { l: "1Y", v: "+18.4%" },
-                                        { l: "5Y", v: "+72.6%" },
-                                    ].map((x) => (
-                                        <div key={x.l} className="border border-[#2A2E39] p-2">
-                                            <div className="text-[10px] uppercase tracking-widest text-[#8A919E]">
-                                                {x.l}
-                                            </div>
-                                            <div className="font-mono-num text-[#00C805] text-sm mt-0.5">
-                                                {x.v}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                        <div className="mt-10 flex flex-wrap gap-4">
+                            <Link
+                                to="/services"
+                                data-testid="hero-cta-services"
+                                className="btn-sharp inline-flex items-center gap-2 bg-[#00C805] hover:bg-[#00E006] text-black font-semibold px-6 py-3.5"
+                            >
+                                Explore Services
+                                <ArrowRight className="w-4 h-4" />
+                            </Link>
+                            <Link
+                                to="/contact"
+                                data-testid="hero-cta-contact"
+                                className="btn-sharp inline-flex items-center gap-2 border border-[#2A2E39] hover:border-[#26A69A] bg-[#131722] text-white font-semibold px-6 py-3.5"
+                            >
+                                Talk to an advisor
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -179,6 +121,68 @@ export default function Home() {
                             <div className="mt-2 text-xs uppercase tracking-widest text-[#8A919E]">
                                 {s.v}
                             </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* WHAT WE OFFER — THREE BENEFITS */}
+            <section
+                data-testid="benefits-section"
+                className="max-w-7xl mx-auto px-6 lg:px-10 py-24 lg:py-32"
+            >
+                <div className="max-w-4xl">
+                    <div className="flex items-center gap-3 text-sm text-[#8A919E]">
+                        <span className="text-[#26A69A] text-xl leading-none">✱</span>
+                        <span className="tracking-wide">What We Offer</span>
+                    </div>
+                    <h2 className="mt-8 font-display font-black text-5xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tighter text-white">
+                        Discover our <br />
+                        main <span className="text-[#26A69A]">three</span> benefits
+                    </h2>
+                </div>
+
+                <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
+                    {[
+                        {
+                            n: "1",
+                            t: "Tailored Financial Solutions",
+                            d: "We design personalized advisory plans built around your goals, risk profile and horizon — no cookie-cutter models, ever.",
+                        },
+                        {
+                            n: "2",
+                            t: "24/7 Client Support",
+                            d: "Markets don't sleep, and neither does our team. Reach us across time zones for prompt, reliable guidance whenever you need it.",
+                        },
+                        {
+                            n: "3",
+                            t: "Exclusive Service Benefits",
+                            d: "Get access to research reports, quarterly briefings and priority scheduling that go beyond the standard advisory relationship.",
+                        },
+                    ].map((b, i) => (
+                        <div
+                            key={b.n}
+                            data-testid={`benefit-${b.n}`}
+                            className="animate-fade-up group"
+                            style={{ animationDelay: `${i * 100}ms` }}
+                        >
+                            <div
+                                className="font-display font-black text-[7rem] lg:text-[9rem] leading-none tracking-tighter select-none"
+                                style={{
+                                    color: "transparent",
+                                    WebkitTextStroke: "2px #26A69A",
+                                }}
+                                aria-hidden="true"
+                            >
+                                {b.n}
+                            </div>
+                            <div className="mt-4 h-px w-full bg-[#2A2E39] group-hover:bg-[#26A69A] transition-colors duration-300" />
+                            <h3 className="mt-6 font-display font-extrabold text-xl lg:text-2xl text-white tracking-tight">
+                                {b.t}
+                            </h3>
+                            <p className="mt-4 text-sm lg:text-[15px] text-[#8A919E] leading-relaxed">
+                                {b.d}
+                            </p>
                         </div>
                     ))}
                 </div>
