@@ -9,7 +9,6 @@ import {
     ArrowRight,
     LineChart,
     PieChart,
-    Landmark,
 } from "lucide-react";
 
 const STATS = [
@@ -37,12 +36,6 @@ const SERVICE_PREVIEWS = [
         title: "Wealth Planning",
         text: "Long-term plans covering estate, insurance, retirement and tax optimization.",
         color: "#4DB6AC",
-    },
-    {
-        icon: Landmark,
-        title: "Tax Optimization",
-        text: "Structure holdings to minimize drag and keep more of what you earn.",
-        color: "#26A69A",
     },
 ];
 
@@ -209,7 +202,7 @@ export default function Home() {
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-[#2A2E39] border border-[#2A2E39]">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#2A2E39] border border-[#2A2E39]">
                     {SERVICE_PREVIEWS.map((s, i) => (
                         <div
                             key={s.title}
