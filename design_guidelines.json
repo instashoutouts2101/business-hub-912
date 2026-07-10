@@ -1,0 +1,84 @@
+{
+  "typography": {
+    "headings": {
+      "family": "Cabinet Grotesk, sans-serif",
+      "weights": ["800", "900"],
+      "tracking": "tracking-tighter",
+      "rules": "Avoid generic sans. Keep it heavy, technical, and impactful."
+    },
+    "body": {
+      "family": "IBM Plex Sans, sans-serif",
+      "weights": ["400", "500"]
+    },
+    "numbers_and_tickers": {
+      "family": "JetBrains Mono, monospace",
+      "weights": ["500"],
+      "rules": "Used exclusively for financial stats, stock tickers, and pricing. Must use tabular nums."
+    }
+  },
+  "colors": {
+    "background": "#0B0E14",
+    "surface": "#131722",
+    "border": "#2A2E39",
+    "primary": "#26A69A",
+    "primary_hover": "#4DB6AC",
+    "destructive": "#EF5350",
+    "text_primary": "#D1D4DC",
+    "text_secondary": "#8A919E",
+    "accent": "#00C805",
+    "rules": "Adhere to the 'Trading Terminal Deep Dark' aesthetic. DO NOT use generic purple gradients. Rely on deep blacks/violet-blacks with high-contrast green/red cultural accent colors."
+  },
+  "visual_enhancers": {
+    "borders": "1px solid #2A2E39 for grid lines and panels to create a technical skeleton.",
+    "surfaces": "Use Solid Backgrounds with a hard border for data panels. For sticky headers, use Glassmorphism (backdrop-blur-xl bg-[#0B0E14]/70 + 1px bottom border).",
+    "textures": "Subtle noise overlay on the background to prevent digital flatness.",
+    "decorations": "Grid background patterns in the hero section to mimic trading chart graph paper."
+  },
+  "component_name": {
+    "buttons": "Sharp rectangular buttons (rounded-sm or rounded-none). Primary CTAs use Accent Green (#00C805) background with high contrast black text.",
+    "cards": "Flat surfaces with 1px border. Utilize 'The Tracing Beam' (moving gradient border) for high-tier Pricing/Services cards.",
+    "forms": "Use Shadcn Input, Select, Textarea. Dark mode inputs with #131722 bg and #2A2E39 border. Focus state must have a 2px green ring (#26A69A)."
+  },
+  "grids": "Use The Bento Grid Protocol. Tetris Mode for Homepage (Asymmetrical). High-Density Grid for Services/Pricing (Data correlation).",
+  "layouts": {
+    "home": "Hero section with abstract chart image overlay and a scrolling ticker tape. Trust indicator stats. Bento grid for services preview.",
+    "services": "Grid layout detailing Investment Advisory, Portfolio Management, etc., ending with distinct Stripe checkout CTAs (Buy/Book).",
+    "contact": "2-column layout. Left side: contact info in mono font. Right side: Shadcn customized minimal form."
+  },
+  "motion": {
+    "micro_interactions": "Hover states on cards (slight lift -translate-y-1, border color illuminates). Focus states for accessibility.",
+    "animations": "Scrolling ticker tape using `react-fast-marquee`. Subtle fade-in-up (Framer Motion) on scroll for bento grid items.",
+    "rules": "Include `prefers-reduced-motion` fallbacks. Keep animations snappy and professional, no slow/floaty effects."
+  },
+  "accessibility": {
+    "testing": "All interactive and key informational elements MUST include a `data-testid` attribute (e.g., `data-testid=\"buy-service-button\"`).",
+    "contrast": "Ensure text meets APCA standards. Minimum 4.5:1 for body against #0B0E14/#131722.",
+    "focus": "All focusable elements must have visible high-contrast outlines (e.g., `focus:ring-2 focus:ring-[#26A69A]`)."
+  },
+  "media": {
+    "images_behavior": "Max overlay opacity bg-black/40 to let images breathe. Mobile height limit max-h-[80vh]."
+  },
+  "3d_libraries": {
+    "recommendation": "Use Recharts for rendering any simple mini-charts (sparklines) inside service cards. Use react-fast-marquee for the stock ticker.",
+    "packages": "recharts, framer-motion, react-fast-marquee, lucide-react"
+  },
+  "image_urls": [
+    {
+      "url": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwxfHxzdG9jayUyMG1hcmtldCUyMGNoYXJ0fGVufDB8fHx8MTc4MzY3NDMyN3ww&ixlib=rb-4.1.0&q=85",
+      "category": "Hero Section",
+      "description": "Stock market candlestick chart on dark screen. Use as background hero image with bg-black/50 overlay."
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1644088379091-d574269d422f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGRhdGElMjB2aXN1YWxpemF0aW9ufGVufDB8fHx8MTc4MzY3NDMyOHww&ixlib=rb-4.1.0&q=85",
+      "category": "Services Section",
+      "description": "Abstract blue data background, useful for accenting technical financial service cards."
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1562564055-71e051d33c19?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHwxfHxmaW5hbmNpYWwlMjBhZHZpc29yJTIwbWVldGluZ3xlbnwwfHx8fDE3ODM2NzQzMjh8MA&ixlib=rb-4.1.0&q=85",
+      "category": "Contact/About",
+      "description": "Professional document signing, representing consultation and trust."
+    }
+  ],
+  "instructions_to_main_agent": "Strictly use the 'Trading Terminal' dark mode aesthetic (backgrounds: #0B0E14, panels: #131722) with distinct green/red accents. DO NOT use generic SaaS blue or purple gradients. Integrate `react-fast-marquee` for a continuous scrolling stock-like ticker across the top or hero section. Use Shadcn UI for forms, cards, and buttons, heavily customizing the default styling to match this technical dark theme. The design must be sharp and angular, avoiding excessive border-radii (max rounded-md). Ensure 3 pages (Home, Services, Contact) are fully built with functioning routing.",
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": "DO NOT create centered layouts or simplistic uniform styling. Apply z-index hierarchy and glassmorphism. DO NOT apply universal transition (`transition: all`). DO NOT center align the root app container. Use sonner for toasts. Incorporate generous padding (p-8, p-12). All files are JS/JSX, not TSX. ALWAYS include `data-testid` on interactive elements for automated testing."
+}
