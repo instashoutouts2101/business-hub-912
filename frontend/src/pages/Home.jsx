@@ -247,13 +247,13 @@ export default function Home() {
                             {
                                 n: "01",
                                 t: "Discovery",
-                                d: "We audit goals, holdings, cash flow and tax posture.",
+                                d: "We find opportunities under every market section for better execution.",
                                 i: Compass,
                             },
                             {
                                 n: "02",
                                 t: "Blueprint",
-                                d: "A written plan across allocation, tax, insurance and estate.",
+                                d: "Tailored made trading plan according to each client's needs.",
                                 i: BarChart3,
                             },
                             {
