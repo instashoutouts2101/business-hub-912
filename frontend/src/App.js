@@ -1,56 +1,59 @@
-import { useEffect } from "react";
-import "@/App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
-import { HOME } from "@/constants/testIds";
+import { Toaster } from "sonner";
+import "@/App.css";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+import Layout from "@/components/Layout";
+import Home from "@/pages/Home";
+import Services from "@/pages/Services";
+import Contact from "@/pages/Contact";
+import PaymentSuccess from "@/pages/PaymentSuccess";
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
-
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          data-testid={HOME.emergentLink}
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
+function NotFound() {
+    return (
+        <div
+            data-testid="not-found-page"
+            className="max-w-3xl mx-auto px-6 lg:px-10 py-32 text-center"
         >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+            <div className="font-mono-num text-xs text-[#8A919E] uppercase tracking-widest">
+                Error · 404
+            </div>
+            <h1 className="mt-4 font-display font-black text-5xl text-white tracking-tighter">
+                Off-chart territory.
+            </h1>
+            <p className="mt-4 text-[#8A919E]">
+                The page you tried to open doesn&apos;t exist.
+            </p>
+        </div>
+    );
+}
 
 function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
+    return (
+        <div className="App">
+            <BrowserRouter>
+                <Layout>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/services" element={<Services />} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/payment/success" element={<PaymentSuccess />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </Layout>
+            </BrowserRouter>
+            <Toaster
+                theme="dark"
+                position="top-right"
+                toastOptions={{
+                    style: {
+                        background: "#131722",
+                        border: "1px solid #2A2E39",
+                        color: "#D1D4DC",
+                    },
+                }}
+            />
+        </div>
+    );
 }
 
 export default App;
