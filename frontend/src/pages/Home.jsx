@@ -105,27 +105,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* STATS */}
-            <section className="max-w-7xl mx-auto px-6 lg:px-10 py-20" data-testid="stats-section">
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-[#2A2E39] border border-[#2A2E39]">
-                    {STATS.map((s, i) => (
-                        <div
-                            key={s.tid}
-                            data-testid={s.tid}
-                            className="bg-[#0B0E14] p-8 animate-fade-up"
-                            style={{ animationDelay: `${i * 60}ms` }}
-                        >
-                            <div className="font-display font-black text-3xl sm:text-4xl text-white font-mono-num tracking-tight">
-                                {s.k}
-                            </div>
-                            <div className="mt-2 text-xs uppercase tracking-widest text-[#8A919E]">
-                                {s.v}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
             {/* WHAT WE OFFER — THREE BENEFITS */}
             <section
                 data-testid="benefits-section"
@@ -183,6 +162,27 @@ export default function Home() {
                             <p className="mt-4 text-sm lg:text-[15px] text-[#8A919E] leading-relaxed">
                                 {b.d}
                             </p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* STATS */}
+            <section className="max-w-7xl mx-auto px-6 lg:px-10 py-20" data-testid="stats-section">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-[#2A2E39] border border-[#2A2E39]">
+                    {STATS.map((s, i) => (
+                        <div
+                            key={s.tid}
+                            data-testid={s.tid}
+                            className="bg-[#0B0E14] p-8 animate-fade-up"
+                            style={{ animationDelay: `${i * 60}ms` }}
+                        >
+                            <div className="font-display font-black text-3xl sm:text-4xl text-white font-mono-num tracking-tight">
+                                {s.k}
+                            </div>
+                            <div className="mt-2 text-xs uppercase tracking-widest text-[#8A919E]">
+                                {s.v}
+                            </div>
                         </div>
                     ))}
                 </div>
