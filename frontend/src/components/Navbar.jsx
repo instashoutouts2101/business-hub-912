@@ -7,8 +7,8 @@ const LOGO_URL =
 
 const NAV = [
     { to: "/", label: "Home", tid: "nav-home" },
-    { to: "/about", label: "About", tid: "nav-about" },
     { to: "/services", label: "Services", tid: "nav-services" },
+    { to: "/about", label: "About Us", tid: "nav-about" },
     { to: "/contact", label: "Contact", tid: "nav-contact" },
 ];
 
