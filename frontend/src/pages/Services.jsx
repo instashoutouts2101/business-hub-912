@@ -36,9 +36,9 @@ const SERVICE_DETAILS = [
         title: "Wealth Planning",
         text: "Long-term plans covering retirement, insurance, estate and legacy.",
         bullets: [
-            "Multi-decade cash-flow modelling",
-            "Insurance & estate coordination",
-            "Family goal-mapping workshop",
+            "Multiple asset allocation",
+            "Investment planning",
+            "Systematic withdrawal advisory",
         ],
     },
 ];
