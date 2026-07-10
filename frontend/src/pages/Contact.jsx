@@ -108,11 +108,15 @@ export default function Contact() {
 
                     <div className="border border-[#2A2E39] bg-[#131722] p-6">
                         <div className="text-xs uppercase tracking-widest text-[#8A919E]">
-                            HQ
+                            Office
                         </div>
-                        <div className="mt-3 flex items-start gap-3 text-white text-sm">
-                            <MapPin className="w-4 h-4 text-[#26A69A] mt-0.5" />
-                            <div>Global · Remote-first advisory</div>
+                        <div className="mt-3 flex items-start gap-3 text-white text-sm leading-relaxed">
+                            <MapPin className="w-4 h-4 text-[#26A69A] mt-0.5 shrink-0" />
+                            <div>
+                                536G, Fitzroy Place 3, Sauchiehall Street,
+                                <br />
+                                Glasgow City Centre, Glasgow, UK
+                            </div>
                         </div>
                     </div>
                 </aside>

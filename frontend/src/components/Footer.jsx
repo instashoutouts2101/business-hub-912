@@ -73,7 +73,11 @@ export default function Footer() {
                         </li>
                         <li className="flex items-start gap-2 text-[#8A919E]">
                             <MapPin className="w-4 h-4 mt-0.5 text-[#26A69A]" />
-                            <span>Global — Remote-first</span>
+                            <span>
+                                536G, Fitzroy Place 3, Sauchiehall Street,
+                                <br />
+                                Glasgow City Centre, Glasgow, UK
+                            </span>
                         </li>
                     </ul>
                 </div>
