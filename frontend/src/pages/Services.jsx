@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { api } from "../lib/api";
-import { toast } from "sonner";
+import { Link } from "react-router-dom";
 import {
     LineChart,
     PieChart,
     Shield,
     Check,
-    Loader2,
     ArrowRight,
+    CandlestickChart,
+    Coins,
+    BarChart3,
 } from "lucide-react";
 
 const SERVICE_DETAILS = [
@@ -43,40 +43,46 @@ const SERVICE_DETAILS = [
     },
 ];
 
+const SIGNAL_TYPES = [
+    {
+        icon: CandlestickChart,
+        eyebrow: "01 · Currency majors & crosses",
+        title: "Forex Signals",
+        text: "Precision entries on major and minor currency pairs — driven by macro flow, session structure and clean technical setups.",
+        instruments: ["EUR / USD", "GBP / USD", "USD / JPY", "AUD / USD", "USD / CAD", "GBP / JPY"],
+        highlights: [
+            "Intraday and swing setups",
+            "Entry, SL & TP with rationale",
+            "Real-time alerts via WhatsApp",
+        ],
+    },
+    {
+        icon: Coins,
+        eyebrow: "02 · Commodities futures",
+        title: "Comex Signals",
+        text: "High-conviction trades across metals and energy — where macro news, inventory data and technical levels converge.",
+        instruments: ["Gold (XAU)", "Silver (XAG)", "Copper (HG)", "Crude Oil (CL)", "Natural Gas (NG)", "Platinum"],
+        highlights: [
+            "Macro-driven bias notes",
+            "Inventory & news catalysts",
+            "Tiered position sizing guidance",
+        ],
+    },
+    {
+        icon: BarChart3,
+        eyebrow: "03 · Global equity indices",
+        title: "Indices Signals",
+        text: "Directional and range calls on the world's most-traded indices — timed around opens, closes and key data releases.",
+        instruments: ["US30", "US100 (NAS)", "SPX500", "GER40 (DAX)", "UK100 (FTSE)", "JP225 (Nikkei)"],
+        highlights: [
+            "Pre-market game plans",
+            "Levels for scalping & swings",
+            "Session-based risk framework",
+        ],
+    },
+];
+
 export default function Services() {
-    const [packages, setPackages] = useState([]);
-    const [loadingId, setLoadingId] = useState(null);
-    const [fetching, setFetching] = useState(true);
-
-    useEffect(() => {
-        api.get("/services/packages")
-            .then((res) => setPackages(res.data.packages || []))
-            .catch(() => toast.error("Failed to load packages"))
-            .finally(() => setFetching(false));
-    }, []);
-
-    const buy = async (pkgId) => {
-        try {
-            setLoadingId(pkgId);
-            const origin = window.location.origin;
-            const res = await api.post("/payments/checkout/session", {
-                package_id: pkgId,
-                origin_url: origin,
-            });
-            if (res.data?.url) {
-                window.location.href = res.data.url;
-            } else {
-                toast.error("Could not start checkout");
-            }
-        } catch (e) {
-            const detail =
-                e?.response?.data?.detail || e?.message || "Payment error";
-            toast.error(String(detail));
-        } finally {
-            setLoadingId(null);
-        }
-    };
-
     return (
         <div data-testid="services-page">
             {/* Header */}
@@ -142,96 +148,112 @@ export default function Services() {
                 </div>
             </section>
 
-            {/* PRICING / PACKAGES */}
+            {/* TRADING SIGNALS SECTION */}
             <section
-                data-testid="packages-section"
-                className="max-w-7xl mx-auto px-6 lg:px-10 py-16"
+                data-testid="signals-section"
+                className="max-w-7xl mx-auto px-6 lg:px-10 py-20"
             >
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-                    <div>
-                        <div className="text-xs uppercase tracking-widest text-[#00C805]">
-                            Get started
-                        </div>
-                        <h2 className="mt-3 font-display font-black text-3xl sm:text-4xl text-white tracking-tighter">
-                            Book a paid session
-                        </h2>
-                        <p className="mt-3 text-sm text-[#8A919E] max-w-xl">
-                            Pick a package that fits and we&apos;ll take it from
-                            there. Instant Stripe checkout — no back and forth.
-                        </p>
+                <div className="max-w-4xl mb-12">
+                    <div className="text-xs uppercase tracking-widest text-[#00C805]">
+                        Trading Signals
                     </div>
+                    <h2 className="mt-3 font-display font-black text-3xl sm:text-4xl lg:text-5xl text-white tracking-tighter">
+                        Live signals across
+                        <br />
+                        the markets we <span className="text-[#26A69A]">know best</span>.
+                    </h2>
+                    <p className="mt-4 text-[#8A919E] max-w-2xl">
+                        Every call is delivered with a full trade plan — entry,
+                        stop-loss, targets and the reasoning behind it. No
+                        black boxes, no hype.
+                    </p>
                 </div>
 
-                {fetching ? (
-                    <div
-                        data-testid="packages-loading"
-                        className="flex items-center gap-2 text-[#8A919E]"
-                    >
-                        <Loader2 className="w-4 h-4 animate-spin" /> Loading packages…
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {packages.map((p, i) => {
-                            const highlighted = i === 1;
-                            return (
-                                <div
-                                    key={p.id}
-                                    data-testid={`package-${p.id}`}
-                                    className={`relative flex flex-col p-6 lg:p-7 border ${
-                                        highlighted
-                                            ? "border-[#00C805] bg-[#131722]"
-                                            : "border-[#2A2E39] bg-[#131722]"
-                                    } card-hover`}
-                                >
-                                    {highlighted && (
-                                        <span className="absolute -top-3 left-6 px-2 py-1 bg-[#00C805] text-black text-[10px] font-bold uppercase tracking-widest">
-                                            Popular
-                                        </span>
-                                    )}
-                                    <div className="text-xs uppercase tracking-widest text-[#8A919E]">
-                                        Package · 0{i + 1}
-                                    </div>
-                                    <h3 className="mt-3 font-display font-extrabold text-xl text-white tracking-tight">
-                                        {p.name}
-                                    </h3>
-                                    <div className="mt-4 flex items-baseline gap-1">
-                                        <span className="font-mono-num font-bold text-4xl text-white">
-                                            ${Number(p.amount).toFixed(0)}
-                                        </span>
-                                        <span className="text-[#8A919E] text-sm uppercase">
-                                            {p.currency}
-                                        </span>
-                                    </div>
-                                    <p className="mt-4 text-sm text-[#8A919E] leading-relaxed flex-1">
-                                        {p.description}
-                                    </p>
-                                    <button
-                                        data-testid={`buy-${p.id}`}
-                                        disabled={loadingId === p.id}
-                                        onClick={() => buy(p.id)}
-                                        className={`btn-sharp mt-6 inline-flex items-center justify-center gap-2 px-4 py-3 font-semibold ${
-                                            highlighted
-                                                ? "bg-[#00C805] hover:bg-[#00E006] text-black"
-                                                : "bg-[#26A69A] hover:bg-[#4DB6AC] text-black"
-                                        } disabled:opacity-60`}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                    {SIGNAL_TYPES.map((s, i) => (
+                        <div
+                            key={s.title}
+                            data-testid={`signal-card-${i}`}
+                            className="card-hover flex flex-col bg-[#131722] border border-[#2A2E39] p-8 lg:p-10 min-h-[520px]"
+                        >
+                            <div className="flex items-center justify-between">
+                                <span className="w-11 h-11 grid place-items-center bg-[#0B0E14] border border-[#26A69A]/40">
+                                    <s.icon
+                                        className="w-5 h-5 text-[#00C805]"
+                                        strokeWidth={1.8}
+                                    />
+                                </span>
+                                <span className="font-mono-num text-[10px] tracking-widest text-[#8A919E] uppercase">
+                                    Live
+                                </span>
+                            </div>
+                            <div className="mt-8 font-mono-num text-[11px] tracking-widest text-[#26A69A] uppercase">
+                                {s.eyebrow}
+                            </div>
+                            <h3 className="mt-3 font-display font-extrabold text-2xl lg:text-3xl text-white tracking-tight">
+                                {s.title}
+                            </h3>
+                            <p className="mt-4 text-sm lg:text-[15px] text-[#8A919E] leading-relaxed">
+                                {s.text}
+                            </p>
+
+                            <div className="mt-6 flex flex-wrap gap-1.5">
+                                {s.instruments.map((inst) => (
+                                    <span
+                                        key={inst}
+                                        className="font-mono-num text-[11px] px-2 py-1 border border-[#2A2E39] text-[#D1D4DC] bg-[#0B0E14]"
                                     >
-                                        {loadingId === p.id ? (
-                                            <>
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                                Redirecting…
-                                            </>
-                                        ) : (
-                                            <>
-                                                Book & Pay
-                                                <ArrowRight className="w-4 h-4" />
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-                            );
-                        })}
+                                        {inst}
+                                    </span>
+                                ))}
+                            </div>
+
+                            <ul className="mt-6 space-y-2.5 flex-1">
+                                {s.highlights.map((h) => (
+                                    <li
+                                        key={h}
+                                        className="flex items-start gap-2 text-sm text-[#D1D4DC]"
+                                    >
+                                        <Check className="w-4 h-4 mt-0.5 text-[#00C805] shrink-0" />
+                                        <span>{h}</span>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <Link
+                                to="/contact"
+                                data-testid={`signal-cta-${i}`}
+                                className="btn-sharp mt-8 inline-flex items-center justify-center gap-2 border border-[#26A69A] hover:bg-[#26A69A] hover:text-black text-[#26A69A] text-sm font-semibold px-4 py-3"
+                            >
+                                Request access
+                                <ArrowRight className="w-4 h-4" />
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="mt-12 border border-[#2A2E39] bg-[#131722] p-8 lg:p-10 flex flex-col md:flex-row md:items-center gap-6 justify-between">
+                    <div>
+                        <div className="text-xs uppercase tracking-widest text-[#00C805]">
+                            Not sure which stream fits you?
+                        </div>
+                        <h3 className="mt-2 font-display font-extrabold text-xl lg:text-2xl text-white tracking-tight">
+                            Book a free 30-minute discovery call.
+                        </h3>
+                        <p className="mt-2 text-sm text-[#8A919E] max-w-xl">
+                            We&apos;ll map your trading style, capital and time
+                            zone to the signal package that fits best.
+                        </p>
                     </div>
-                )}
+                    <Link
+                        to="/contact"
+                        data-testid="signals-book-call"
+                        className="btn-sharp inline-flex items-center gap-2 bg-[#00C805] hover:bg-[#00E006] text-black font-semibold px-6 py-3.5 shrink-0"
+                    >
+                        Book Discovery Call
+                        <ArrowRight className="w-4 h-4" />
+                    </Link>
+                </div>
             </section>
         </div>
     );
