@@ -91,7 +91,7 @@ const PLAN_IDS = ["signals_starter", "signals_pro", "signals_premium"];
 
 const PLAN_FEATURES = {
     signals_starter: [
-        "3 Forex signals / week",
+        "15–20 signals / week",
         "WhatsApp delivery",
         "Entry · SL · TP included",
         "Community access",
