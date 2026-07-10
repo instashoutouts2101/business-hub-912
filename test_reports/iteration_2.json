@@ -1,0 +1,41 @@
+{
+  "summary": "Verified signals_starter price update ($29 -> $200) end-to-end. Backend returns amount=200 for signals_starter (pro=79, premium=149 unchanged). Frontend /services page correctly renders $200 on the Starter card with '15–20 signals / week' feature bullet after clicking signal-cta-0. Stripe subscribe redirect works and Stripe session amount_total=200.0 confirmed.",
+  "tested_scope": ["backend", "frontend", "integration"],
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Services > Starter plan card", "issues": ["Description paragraph inside plan-signals_starter still reads '3 curated Forex signals per week with entry, SL and TP on WhatsApp.' (comes from SERVICE_PACKAGES.signals_starter.description in server.py line 49). This contradicts the new '15–20 signals / week' feature bullet. Consider updating the backend description to match the new positioning."]}
+    ]
+  },
+  "passed": [
+    "GET /api/services/packages -> signals_starter.amount=200.0, signals_pro.amount=79.0, signals_premium.amount=149.0",
+    "POST /api/payments/checkout/session {package_id: signals_starter} -> 200 with checkout.stripe.com URL",
+    "GET /api/payments/checkout/status/{sid} -> amount_total=200.0, currency=usd (server-side price enforcement verified)",
+    "Frontend: clicking signal-cta-0 (Forex) reveals signal-plans-section",
+    "Frontend: plan-signals_starter card displays '$200 /mo · USD'",
+    "Frontend: no legacy '$29' anywhere on starter card",
+    "Frontend: first bullet in starter card reads '15–20 signals / week'",
+    "Frontend: no legacy '3 Forex signals / week' bullet",
+    "Frontend: clicking buy-plan-signals_starter navigates to checkout.stripe.com (session cs_test_a1GUul... created)"
+  ],
+  "failed": [],
+  "test_report_links": [
+    "/app/backend/tests/test_signals_pricing.py",
+    "/app/test_reports/pytest/signals_pricing.xml"
+  ],
+  "action_items": [
+    "(Optional / minor) Update SERVICE_PACKAGES['signals_starter'].description in /app/backend/server.py to align with '15–20 signals / week' — currently still says '3 curated Forex signals per week...' which contradicts the feature bullet on the Starter card."
+  ],
+  "critical_code_review_comments": [
+    "Backend description for signals_starter is out of sync with new PLAN_FEATURES bullet — user-facing marketing copy inconsistency."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_signals_pricing.py (new)"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "signals_starter is confirmed at $200 both in API and UI. Only remaining nit is copy inconsistency in server.py SERVICE_PACKAGES['signals_starter'].description ('3 curated Forex signals per week...') which is rendered as the paragraph above the price on the plan card. If main agent updates it, only a quick visual re-check needed."
+}
