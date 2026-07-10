@@ -58,7 +58,7 @@ SERVICE_PACKAGES = {
     "signals_premium": {
         "id": "signals_premium",
         "name": "Premium · All streams + 1-on-1",
-        "amount": 149.00,
+        "amount": 300.00,
         "currency": "usd",
         "description": "Real-time signals, priority alerts and a monthly 1-on-1 strategy review.",
     },
