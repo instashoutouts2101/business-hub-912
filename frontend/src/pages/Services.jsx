@@ -26,9 +26,9 @@ const SERVICE_DETAILS = [
         title: "Portfolio Management",
         text: "Rules-based, tax-aware portfolios across equities, ETFs, bonds and alternatives.",
         bullets: [
-            "Model portfolios across 5 risk bands",
+            "Model portfolios across all market sections",
             "Systematic rebalancing",
-            "Institutional-grade custody",
+            "Dedicated portfolio manager",
         ],
     },
     {
