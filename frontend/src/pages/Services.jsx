@@ -5,9 +5,6 @@ import {
     LineChart,
     PieChart,
     Shield,
-    Landmark,
-    BarChart3,
-    Briefcase,
     Check,
     Loader2,
     ArrowRight,
@@ -42,36 +39,6 @@ const SERVICE_DETAILS = [
             "Multi-decade cash-flow modelling",
             "Insurance & estate coordination",
             "Family goal-mapping workshop",
-        ],
-    },
-    {
-        icon: Landmark,
-        title: "Tax Optimization",
-        text: "Structure holdings and entities to reduce drag and increase compounding.",
-        bullets: [
-            "Tax-loss harvesting overlay",
-            "Entity & account location review",
-            "Year-end optimization playbook",
-        ],
-    },
-    {
-        icon: BarChart3,
-        title: "Retirement Planning",
-        text: "Design an income machine that outlives you — not the other way around.",
-        bullets: [
-            "Withdrawal-rate stress tests",
-            "Social security & pension optimization",
-            "Sequence-of-returns hedging",
-        ],
-    },
-    {
-        icon: Briefcase,
-        title: "Business Advisory",
-        text: "Capital, cash and treasury guidance for founders and owner-operators.",
-        bullets: [
-            "Cash & treasury policy",
-            "Owner comp / retirement",
-            "Exit-planning readiness",
         ],
     },
 ];
@@ -120,7 +87,7 @@ export default function Services() {
                         Services · Full stack financial advisory
                     </div>
                     <h1 className="mt-4 font-display font-black text-4xl sm:text-5xl lg:text-6xl text-white tracking-tighter max-w-4xl">
-                        Six focused services.
+                        Three focused services.
                         <br />
                         One disciplined system.
                     </h1>
