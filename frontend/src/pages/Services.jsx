@@ -104,35 +104,35 @@ export default function Services() {
                 data-testid="services-grid"
                 className="max-w-7xl mx-auto px-6 lg:px-10 py-16"
             >
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#2A2E39] border border-[#2A2E39]">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
                     {SERVICE_DETAILS.map((s, i) => (
                         <div
                             key={s.title}
                             data-testid={`service-card-${i}`}
-                            className="card-hover bg-[#131722] p-8"
+                            className="card-hover flex flex-col bg-[#131722] border border-[#2A2E39] p-8 lg:p-10 min-h-[420px]"
                         >
                             <div className="flex items-center justify-between">
                                 <s.icon
-                                    className="w-6 h-6 text-[#26A69A]"
+                                    className="w-7 h-7 text-[#26A69A]"
                                     strokeWidth={1.8}
                                 />
                                 <span className="font-mono-num text-[11px] tracking-widest text-[#8A919E]">
                                     0{i + 1}
                                 </span>
                             </div>
-                            <h3 className="mt-6 font-display font-extrabold text-2xl text-white tracking-tight">
+                            <h3 className="mt-8 font-display font-extrabold text-2xl lg:text-3xl text-white tracking-tight">
                                 {s.title}
                             </h3>
-                            <p className="mt-3 text-sm text-[#8A919E] leading-relaxed">
+                            <p className="mt-4 text-sm lg:text-[15px] text-[#8A919E] leading-relaxed">
                                 {s.text}
                             </p>
-                            <ul className="mt-5 space-y-2">
+                            <ul className="mt-6 space-y-2.5 flex-1">
                                 {s.bullets.map((b) => (
                                     <li
                                         key={b}
                                         className="flex items-start gap-2 text-sm text-[#D1D4DC]"
                                     >
-                                        <Check className="w-4 h-4 mt-0.5 text-[#00C805]" />
+                                        <Check className="w-4 h-4 mt-0.5 text-[#00C805] shrink-0" />
                                         <span>{b}</span>
                                     </li>
                                 ))}
