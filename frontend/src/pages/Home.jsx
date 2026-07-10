@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Ticker from "../components/Ticker";
+import AnimatedChartBg from "../components/AnimatedChartBg";
 import {
     TrendingUp,
     BarChart3,
@@ -10,9 +11,6 @@ import {
     PieChart,
     Landmark,
 } from "lucide-react";
-
-const HERO_BG =
-    "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwxfHxzdG9jayUyMG1hcmtldCUyMGNoYXJ0fGVufDB8fHx8MTc4MzY3NDMyN3ww&ixlib=rb-4.1.0&q=85";
 
 const STATS = [
     { k: "$142M+", v: "Assets Advised", tid: "stat-aum" },
@@ -52,15 +50,12 @@ export default function Home() {
     return (
         <div data-testid="home-page">
             {/* HERO */}
-            <section className="relative overflow-hidden" data-testid="hero-section">
+            <section className="relative overflow-hidden min-h-[720px] lg:min-h-[780px]" data-testid="hero-section">
                 <div className="absolute inset-0">
-                    <img
-                        src={HERO_BG}
-                        alt="Trading chart"
-                        className="w-full h-full object-cover opacity-30"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#0B0E14]/40 via-[#0B0E14]/70 to-[#0B0E14]" />
-                    <div className="absolute inset-0 gs-grid-bg opacity-70" />
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,#0e2e29_0%,#071b17_55%,#04100e_100%)]" />
+                    <AnimatedChartBg />
+                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#0B0E14]/85 via-[#0B0E14]/40 to-transparent" />
+                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-[#0B0E14]" />
                     <div className="gs-noise" />
                 </div>
 

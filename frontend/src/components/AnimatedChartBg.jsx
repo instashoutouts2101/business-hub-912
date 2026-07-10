@@ -279,7 +279,7 @@ export default function AnimatedChartBg({ className = "" }) {
             ref={canvasRef}
             data-testid="animated-chart-bg"
             aria-hidden="true"
-            className={`block w-full h-full ${className}`}
+            className={`absolute inset-0 block w-full h-full ${className}`}
         />
     );
 }
