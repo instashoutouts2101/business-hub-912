@@ -5,11 +5,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import asyncio
 import logging
-import smtplib
-import ssl
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from email.utils import formataddr
+import resend
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from typing import Optional, List
@@ -31,10 +27,12 @@ mongo_url = os.environ["MONGO_URL"]
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ["DB_NAME"]]
 
-CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "globensloutions@gmail.com")
+CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "globensolutions@gmail.com")
 STRIPE_API_KEY = os.environ.get("STRIPE_API_KEY", "sk_test_emergent")
-GMAIL_SENDER = os.environ.get("GMAIL_SENDER", CONTACT_EMAIL)
-GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "").replace(" ", "")
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
+if RESEND_API_KEY:
+    resend.api_key = RESEND_API_KEY
 
 app = FastAPI(title="Globen Solutions API")
 api_router = APIRouter(prefix="/api")
@@ -132,29 +130,32 @@ class Lead(BaseModel):
 
 
 # ============================================================
-# Email helper (Gmail SMTP via App Password)
+# Email helper (Resend)
 # ============================================================
-def send_email_sync(subject: str, body_text: str, body_html: str, to_email: str) -> bool:
-    """Blocking SMTP send. Runs inside asyncio.to_thread from route handlers.
+def _send_email_sync(subject: str, body_text: str, body_html: str, to_email: str) -> bool:
+    """Blocking Resend call. Runs inside asyncio.to_thread from route handlers.
     Returns True on success, False on failure (logged)."""
-    if not GMAIL_APP_PASSWORD or not GMAIL_SENDER:
-        logger.warning("GMAIL_APP_PASSWORD / GMAIL_SENDER not configured; skipping email.")
+    if not RESEND_API_KEY:
+        logger.warning("RESEND_API_KEY not configured; skipping email.")
         return False
     try:
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = subject
-        msg["From"] = formataddr(("Globen Solutions", GMAIL_SENDER))
-        msg["To"] = to_email
-        msg.attach(MIMEText(body_text, "plain"))
-        msg.attach(MIMEText(body_html, "html"))
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context, timeout=15) as server:
-            server.login(GMAIL_SENDER, GMAIL_APP_PASSWORD)
-            server.sendmail(GMAIL_SENDER, [to_email], msg.as_string())
+        resp = resend.Emails.send({
+            "from": f"Globen Solutions <{SENDER_EMAIL}>",
+            "to": [to_email],
+            "subject": subject,
+            "html": body_html,
+            "text": body_text,
+        })
+        logger.info("Resend accepted email id=%s to=%s", resp.get("id"), to_email)
         return True
     except Exception:
-        logger.exception("SMTP send failed")
+        logger.exception("Resend send failed")
         return False
+
+
+async def send_email(subject: str, body_text: str, body_html: str, to_email: str) -> None:
+    """Fire-and-forget email dispatch."""
+    await asyncio.to_thread(_send_email_sync, subject, body_text, body_html, to_email)
 
 
 # ============================================================
@@ -215,9 +216,7 @@ async def create_contact(payload: ContactCreate):
       <div style="white-space:pre-wrap;font-size:14px;line-height:1.6;">{contact.message}</div>
     </div>
     """
-    asyncio.create_task(
-        asyncio.to_thread(send_email_sync, subject, plain, html, CONTACT_EMAIL)
-    )
+    asyncio.create_task(send_email(subject, plain, html, CONTACT_EMAIL))
     return contact
 
 
@@ -269,9 +268,7 @@ async def create_lead(payload: LeadCreate):
       </p>
     </div>
     """
-    asyncio.create_task(
-        asyncio.to_thread(send_email_sync, subject, plain, html, CONTACT_EMAIL)
-    )
+    asyncio.create_task(send_email(subject, plain, html, CONTACT_EMAIL))
     return lead
 
 

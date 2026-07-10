@@ -64,11 +64,11 @@ export default function Footer() {
                         <li className="flex items-start gap-2">
                             <Mail className="w-4 h-4 mt-0.5 text-[#26A69A]" />
                             <a
-                                href="mailto:globensloutions@gmail.com"
+                                href="mailto:globensolutions@gmail.com"
                                 className="hover:text-[#00C805] break-all"
                                 data-testid="footer-email"
                             >
-                                globensloutions@gmail.com
+                                globensolutions@gmail.com
                             </a>
                         </li>
                         <li className="flex items-start gap-2 text-[#8A919E]">

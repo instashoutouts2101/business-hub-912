@@ -71,12 +71,12 @@ export default function Contact() {
                             Email
                         </div>
                         <a
-                            href="mailto:globensloutions@gmail.com"
+                            href="mailto:globensolutions@gmail.com"
                             data-testid="contact-email-link"
                             className="mt-3 flex items-center gap-3 text-white hover:text-[#00C805] break-all font-mono-num text-sm"
                         >
                             <Mail className="w-4 h-4 text-[#26A69A]" />
-                            globensloutions@gmail.com
+                            globensolutions@gmail.com
                         </a>
                     </div>
 
@@ -178,7 +178,7 @@ export default function Contact() {
                             <p className="text-xs text-[#8A919E]">
                                 We reply from{" "}
                                 <span className="text-white font-mono-num">
-                                    globensloutions@gmail.com
+                                    globensolutions@gmail.com
                                 </span>
                                 .
                             </p>
