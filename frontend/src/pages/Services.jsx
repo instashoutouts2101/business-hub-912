@@ -16,7 +16,7 @@ const SERVICE_DETAILS = [
         title: "Investment Advisory",
         text: "Objective, fiduciary advice tailored to your risk profile, horizon and life goals.",
         bullets: [
-            "Written investment policy statement",
+            "Potential opportunities across all market sections",
             "Risk & horizon calibration",
             "Quarterly written outlook",
         ],
