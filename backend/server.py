@@ -41,33 +41,33 @@ api_router = APIRouter(prefix="/api")
 # Fixed Server-Side Service Packages (prevents price manipulation)
 # ============================================================
 SERVICE_PACKAGES = {
+    "signals_starter": {
+        "id": "signals_starter",
+        "name": "Starter · Forex only",
+        "amount": 29.00,
+        "currency": "usd",
+        "description": "3 curated Forex signals per week with entry, SL and TP on WhatsApp.",
+    },
+    "signals_pro": {
+        "id": "signals_pro",
+        "name": "Pro · Forex + Comex + Indices",
+        "amount": 79.00,
+        "currency": "usd",
+        "description": "Daily signals across all three streams, delivered via WhatsApp and email.",
+    },
+    "signals_premium": {
+        "id": "signals_premium",
+        "name": "Premium · All streams + 1-on-1",
+        "amount": 149.00,
+        "currency": "usd",
+        "description": "Real-time signals, priority alerts and a monthly 1-on-1 strategy review.",
+    },
     "consult_30": {
         "id": "consult_30",
         "name": "30-Minute Discovery Call",
         "amount": 49.00,
         "currency": "usd",
         "description": "A focused 30-minute call to review your financial goals.",
-    },
-    "consult_60": {
-        "id": "consult_60",
-        "name": "60-Minute Strategy Session",
-        "amount": 149.00,
-        "currency": "usd",
-        "description": "In-depth strategy session covering portfolio review and planning.",
-    },
-    "portfolio_review": {
-        "id": "portfolio_review",
-        "name": "Full Portfolio Audit",
-        "amount": 349.00,
-        "currency": "usd",
-        "description": "Comprehensive audit of your holdings with a written report.",
-    },
-    "wealth_plan": {
-        "id": "wealth_plan",
-        "name": "Personal Wealth Plan",
-        "amount": 799.00,
-        "currency": "usd",
-        "description": "A tailored multi-year wealth strategy including tax optimization.",
     },
 }
 

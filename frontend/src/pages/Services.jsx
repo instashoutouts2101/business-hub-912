@@ -1,4 +1,7 @@
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { api } from "../lib/api";
+import { toast } from "sonner";
 import {
     LineChart,
     PieChart,
@@ -8,6 +11,8 @@ import {
     CandlestickChart,
     Coins,
     BarChart3,
+    Loader2,
+    Zap,
 } from "lucide-react";
 
 const SERVICE_DETAILS = [
@@ -82,7 +87,79 @@ const SIGNAL_TYPES = [
     },
 ];
 
+const PLAN_IDS = ["signals_starter", "signals_pro", "signals_premium"];
+
+const PLAN_FEATURES = {
+    signals_starter: [
+        "3 Forex signals / week",
+        "WhatsApp delivery",
+        "Entry · SL · TP included",
+        "Community access",
+    ],
+    signals_pro: [
+        "Daily signals — Forex, Comex, Indices",
+        "WhatsApp + email delivery",
+        "Session game-plans (LDN + NY opens)",
+        "Weekly market briefing",
+        "Community + trader Q&A",
+    ],
+    signals_premium: [
+        "All Pro features",
+        "Real-time / priority alerts",
+        "Monthly 1-on-1 strategy review",
+        "Personalised risk plan",
+        "Direct line to lead analyst",
+    ],
+};
+
 export default function Services() {
+    const [plans, setPlans] = useState([]);
+    const [loadingId, setLoadingId] = useState(null);
+    const [showPlans, setShowPlans] = useState(false);
+    const [preselect, setPreselect] = useState(null);
+    const plansRef = useRef(null);
+
+    useEffect(() => {
+        api.get("/services/packages")
+            .then((res) => {
+                const all = res.data.packages || [];
+                setPlans(
+                    PLAN_IDS.map((id) => all.find((p) => p.id === id)).filter(Boolean),
+                );
+            })
+            .catch(() => toast.error("Failed to load plans"));
+    }, []);
+
+    const requestAccess = (planId) => {
+        setShowPlans(true);
+        setPreselect(planId);
+        // Scroll after the section is rendered
+        setTimeout(() => {
+            plansRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 60);
+    };
+
+    const buy = async (planId) => {
+        try {
+            setLoadingId(planId);
+            const origin = window.location.origin;
+            const res = await api.post("/payments/checkout/session", {
+                package_id: planId,
+                origin_url: origin,
+            });
+            if (res.data?.url) {
+                window.location.href = res.data.url;
+            } else {
+                toast.error("Could not start checkout");
+            }
+        } catch (e) {
+            const detail =
+                e?.response?.data?.detail || e?.message || "Payment error";
+            toast.error(String(detail));
+        } finally {
+            setLoadingId(null);
+        }
+    };
     return (
         <div data-testid="services-page">
             {/* Header */}
@@ -220,14 +297,18 @@ export default function Services() {
                                 ))}
                             </ul>
 
-                            <Link
-                                to="/contact"
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    const map = ["signals_starter", "signals_pro", "signals_premium"];
+                                    requestAccess(map[i] || "signals_pro");
+                                }}
                                 data-testid={`signal-cta-${i}`}
                                 className="btn-sharp mt-8 inline-flex items-center justify-center gap-2 border border-[#26A69A] hover:bg-[#26A69A] hover:text-black text-[#26A69A] text-sm font-semibold px-4 py-3"
                             >
                                 Request access
                                 <ArrowRight className="w-4 h-4" />
-                            </Link>
+                            </button>
                         </div>
                     ))}
                 </div>
@@ -255,6 +336,126 @@ export default function Services() {
                     </Link>
                 </div>
             </section>
+
+            {/* BUY SIGNALS — PLANS (revealed on Request access) */}
+            {showPlans && (
+                <section
+                    ref={plansRef}
+                    data-testid="signal-plans-section"
+                    className="max-w-7xl mx-auto px-6 lg:px-10 pb-24"
+                >
+                    <div className="max-w-4xl mb-12">
+                        <div className="text-xs uppercase tracking-widest text-[#00C805]">
+                            Buy Signals · Monthly Access
+                        </div>
+                        <h2 className="mt-3 font-display font-black text-3xl sm:text-4xl lg:text-5xl text-white tracking-tighter">
+                            Pick the stream that
+                            <br />
+                            matches your <span className="text-[#26A69A]">edge</span>.
+                        </h2>
+                        <p className="mt-4 text-[#8A919E] max-w-2xl">
+                            Instant delivery after checkout. Cancel anytime.
+                            All plans include a 7-day satisfaction window —
+                            not happy, drop us a line for a full refund.
+                        </p>
+                    </div>
+
+                    {plans.length === 0 ? (
+                        <div className="flex items-center gap-2 text-[#8A919E]" data-testid="plans-loading">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Loading plans…
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                            {plans.map((p, i) => {
+                                const featured = p.id === "signals_pro";
+                                const focused = preselect === p.id;
+                                return (
+                                    <div
+                                        key={p.id}
+                                        data-testid={`plan-${p.id}`}
+                                        className={`relative flex flex-col p-8 lg:p-10 min-h-[520px] card-hover border ${
+                                            focused
+                                                ? "border-[#00C805] shadow-[0_0_0_2px_rgba(0,200,5,0.25)]"
+                                                : featured
+                                                    ? "border-[#26A69A]"
+                                                    : "border-[#2A2E39]"
+                                        } bg-[#131722]`}
+                                    >
+                                        {featured && (
+                                            <span className="absolute -top-3 left-8 px-2 py-1 bg-[#00C805] text-black text-[10px] font-bold uppercase tracking-widest">
+                                                Most popular
+                                            </span>
+                                        )}
+                                        <div className="flex items-center justify-between">
+                                            <Zap
+                                                className="w-6 h-6 text-[#26A69A]"
+                                                strokeWidth={1.8}
+                                            />
+                                            <span className="font-mono-num text-[10px] tracking-widest text-[#8A919E] uppercase">
+                                                Plan · 0{i + 1}
+                                            </span>
+                                        </div>
+                                        <h3 className="mt-6 font-display font-extrabold text-2xl text-white tracking-tight">
+                                            {p.name}
+                                        </h3>
+                                        <p className="mt-3 text-sm text-[#8A919E] leading-relaxed">
+                                            {p.description}
+                                        </p>
+                                        <div className="mt-6 flex items-baseline gap-1">
+                                            <span className="font-mono-num font-bold text-5xl text-white">
+                                                ${Number(p.amount).toFixed(0)}
+                                            </span>
+                                            <span className="text-[#8A919E] text-sm">
+                                                /mo · {p.currency?.toUpperCase()}
+                                            </span>
+                                        </div>
+                                        <ul className="mt-6 space-y-2.5 flex-1">
+                                            {(PLAN_FEATURES[p.id] || []).map((f) => (
+                                                <li
+                                                    key={f}
+                                                    className="flex items-start gap-2 text-sm text-[#D1D4DC]"
+                                                >
+                                                    <Check className="w-4 h-4 mt-0.5 text-[#00C805] shrink-0" />
+                                                    <span>{f}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <button
+                                            type="button"
+                                            data-testid={`buy-plan-${p.id}`}
+                                            disabled={loadingId === p.id}
+                                            onClick={() => buy(p.id)}
+                                            className={`btn-sharp mt-8 inline-flex items-center justify-center gap-2 px-4 py-3.5 font-semibold ${
+                                                featured
+                                                    ? "bg-[#00C805] hover:bg-[#00E006] text-black"
+                                                    : "bg-[#26A69A] hover:bg-[#4DB6AC] text-black"
+                                            } disabled:opacity-60`}
+                                        >
+                                            {loadingId === p.id ? (
+                                                <>
+                                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                                    Redirecting…
+                                                </>
+                                            ) : (
+                                                <>
+                                                    Subscribe
+                                                    <ArrowRight className="w-4 h-4" />
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    <p className="mt-8 text-xs text-[#8A919E] font-mono-num">
+                        Secure payment · powered by Stripe. Signals are educational only —
+                        not financial advice. Trade at your own risk.
+                    </p>
+                </section>
+            )}
         </div>
     );
 }
