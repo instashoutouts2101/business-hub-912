@@ -51,9 +51,9 @@ SERVICE_PACKAGES = {
     "signals_pro": {
         "id": "signals_pro",
         "name": "Pro · Forex + Comex + Indices",
-        "amount": 79.00,
+        "amount": 250.00,
         "currency": "usd",
-        "description": "Daily signals across all three streams, delivered via WhatsApp and email.",
+        "description": "Daily signals across all three streams, delivered via WhatsApp.",
     },
     "signals_premium": {
         "id": "signals_premium",

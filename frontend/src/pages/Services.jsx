@@ -98,7 +98,7 @@ const PLAN_FEATURES = {
     ],
     signals_pro: [
         "Daily signals — Forex, Comex, Indices",
-        "WhatsApp + email delivery",
+        "WhatsApp delivery",
         "Session game-plans (LDN + NY opens)",
         "Weekly market briefing",
         "Community + trader Q&A",
