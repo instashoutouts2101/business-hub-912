@@ -46,7 +46,7 @@ SERVICE_PACKAGES = {
         "name": "Starter · Forex only",
         "amount": 200.00,
         "currency": "usd",
-        "description": "3 curated Forex signals per week with entry, SL and TP on WhatsApp.",
+        "description": "15–20 curated Forex signals per week with entry, SL and TP on WhatsApp.",
     },
     "signals_pro": {
         "id": "signals_pro",
