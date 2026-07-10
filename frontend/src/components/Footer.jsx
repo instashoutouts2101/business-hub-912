@@ -44,6 +44,11 @@ export default function Footer() {
                             </Link>
                         </li>
                         <li>
+                            <Link to="/about" className="hover:text-[#00C805]" data-testid="footer-link-about">
+                                About
+                            </Link>
+                        </li>
+                        <li>
                             <Link to="/services" className="hover:text-[#00C805]" data-testid="footer-link-services">
                                 Services
                             </Link>
