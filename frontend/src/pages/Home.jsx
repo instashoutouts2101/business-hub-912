@@ -13,10 +13,10 @@ import {
 } from "lucide-react";
 
 const STATS = [
-    { k: "$142M+", v: "Assets Advised", tid: "stat-aum" },
-    { k: "12.4%", v: "10-yr Avg. Return", tid: "stat-return" },
-    { k: "230+", v: "Clients Served", tid: "stat-clients" },
-    { k: "18 yrs", v: "Combined Experience", tid: "stat-exp" },
+    { k: "80%", v: "Client Success", tid: "stat-success" },
+    { k: "2,500+", v: "Advices Given", tid: "stat-advices" },
+    { k: "13K", v: "Signals Provided", tid: "stat-signals" },
+    { k: "7 yrs", v: "Combined Experience", tid: "stat-exp" },
 ];
 
 const SERVICE_PREVIEWS = [
