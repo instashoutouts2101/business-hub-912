@@ -3,7 +3,13 @@ from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+import asyncio
 import logging
+import smtplib
+import ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.utils import formataddr
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from typing import Optional, List
@@ -27,6 +33,8 @@ db = client[os.environ["DB_NAME"]]
 
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "globensloutions@gmail.com")
 STRIPE_API_KEY = os.environ.get("STRIPE_API_KEY", "sk_test_emergent")
+GMAIL_SENDER = os.environ.get("GMAIL_SENDER", CONTACT_EMAIL)
+GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "").replace(" ", "")
 
 app = FastAPI(title="Globen Solutions API")
 api_router = APIRouter(prefix="/api")
@@ -108,6 +116,47 @@ class PaymentStatusResponse(BaseModel):
     package_id: Optional[str] = None
 
 
+class LeadCreate(BaseModel):
+    name: str = Field(..., min_length=2, max_length=120)
+    email: EmailStr
+    whatsapp: str = Field(..., min_length=5, max_length=40)
+
+
+class Lead(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: EmailStr
+    whatsapp: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+# ============================================================
+# Email helper (Gmail SMTP via App Password)
+# ============================================================
+def send_email_sync(subject: str, body_text: str, body_html: str, to_email: str) -> bool:
+    """Blocking SMTP send. Runs inside asyncio.to_thread from route handlers.
+    Returns True on success, False on failure (logged)."""
+    if not GMAIL_APP_PASSWORD or not GMAIL_SENDER:
+        logger.warning("GMAIL_APP_PASSWORD / GMAIL_SENDER not configured; skipping email.")
+        return False
+    try:
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = subject
+        msg["From"] = formataddr(("Globen Solutions", GMAIL_SENDER))
+        msg["To"] = to_email
+        msg.attach(MIMEText(body_text, "plain"))
+        msg.attach(MIMEText(body_html, "html"))
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context, timeout=15) as server:
+            server.login(GMAIL_SENDER, GMAIL_APP_PASSWORD)
+            server.sendmail(GMAIL_SENDER, [to_email], msg.as_string())
+        return True
+    except Exception:
+        logger.exception("SMTP send failed")
+        return False
+
+
 # ============================================================
 # Routes
 # ============================================================
@@ -142,8 +191,33 @@ async def create_contact(payload: ContactCreate):
         contact.email,
         CONTACT_EMAIL,
     )
-    # NOTE: To actually deliver an email, plug in Resend / SendGrid / SMTP here.
-    # Currently we persist submissions to MongoDB and expose them via GET /contact/submissions
+    # Fire-and-forget email delivery to the business inbox
+    subject = f"New contact — {contact.name} ({contact.subject or 'General enquiry'})"
+    plain = (
+        f"New contact submission via Globen Solutions website\n\n"
+        f"Name:    {contact.name}\n"
+        f"Email:   {contact.email}\n"
+        f"Phone:   {contact.phone or '-'}\n"
+        f"Subject: {contact.subject or '-'}\n\n"
+        f"Message:\n{contact.message}\n"
+    )
+    html = f"""
+    <div style="font-family:Segoe UI,Arial,sans-serif;color:#111;">
+      <h2 style="margin:0 0 12px;color:#0B0E14;">New contact submission</h2>
+      <p style="color:#555;margin:0 0 20px;">Received via <strong>globen-solutions.com</strong></p>
+      <table style="border-collapse:collapse;font-size:14px;">
+        <tr><td style="padding:6px 12px;color:#666;">Name</td><td style="padding:6px 12px;"><strong>{contact.name}</strong></td></tr>
+        <tr><td style="padding:6px 12px;color:#666;">Email</td><td style="padding:6px 12px;"><a href="mailto:{contact.email}">{contact.email}</a></td></tr>
+        <tr><td style="padding:6px 12px;color:#666;">Phone</td><td style="padding:6px 12px;">{contact.phone or '-'}</td></tr>
+        <tr><td style="padding:6px 12px;color:#666;">Subject</td><td style="padding:6px 12px;">{contact.subject or '-'}</td></tr>
+      </table>
+      <hr style="border:none;border-top:1px solid #eee;margin:20px 0;" />
+      <div style="white-space:pre-wrap;font-size:14px;line-height:1.6;">{contact.message}</div>
+    </div>
+    """
+    asyncio.create_task(
+        asyncio.to_thread(send_email_sync, subject, plain, html, CONTACT_EMAIL)
+    )
     return contact
 
 
@@ -158,6 +232,61 @@ async def list_submissions():
         if isinstance(d.get("created_at"), str):
             d["created_at"] = datetime.fromisoformat(d["created_at"])
     return docs
+
+
+# --- Leads (homepage quick-lead form) ---
+@api_router.post("/leads", response_model=Lead)
+async def create_lead(payload: LeadCreate):
+    lead = Lead(**payload.model_dump())
+    doc = lead.model_dump()
+    doc["created_at"] = doc["created_at"].isoformat()
+    doc["recipient"] = CONTACT_EMAIL
+    doc["source"] = "homepage_lead_form"
+    await db.lead_submissions.insert_one(doc)
+    logger.info("New lead: %s <%s> whatsapp=%s", lead.name, lead.email, lead.whatsapp)
+
+    subject = f"New discovery-call lead — {lead.name}"
+    plain = (
+        f"New lead from Globen Solutions homepage form\n\n"
+        f"Name:     {lead.name}\n"
+        f"Email:    {lead.email}\n"
+        f"WhatsApp: {lead.whatsapp}\n"
+        f"When:     {lead.created_at.isoformat()}\n"
+    )
+    wa_digits = "".join(ch for ch in lead.whatsapp if ch.isdigit())
+    wa_link = f"https://wa.me/{wa_digits}" if wa_digits else "#"
+    html = f"""
+    <div style="font-family:Segoe UI,Arial,sans-serif;color:#111;">
+      <h2 style="margin:0 0 12px;color:#0B0E14;">New discovery-call lead</h2>
+      <p style="color:#555;margin:0 0 20px;">Received via the Globen Solutions homepage form.</p>
+      <table style="border-collapse:collapse;font-size:14px;">
+        <tr><td style="padding:6px 12px;color:#666;">Name</td><td style="padding:6px 12px;"><strong>{lead.name}</strong></td></tr>
+        <tr><td style="padding:6px 12px;color:#666;">Email</td><td style="padding:6px 12px;"><a href="mailto:{lead.email}">{lead.email}</a></td></tr>
+        <tr><td style="padding:6px 12px;color:#666;">WhatsApp</td><td style="padding:6px 12px;"><a href="{wa_link}">{lead.whatsapp}</a></td></tr>
+      </table>
+      <p style="margin-top:20px;">
+        <a href="{wa_link}" style="background:#00C805;color:#000;padding:10px 18px;text-decoration:none;font-weight:600;border-radius:4px;display:inline-block;">Open WhatsApp chat</a>
+      </p>
+    </div>
+    """
+    asyncio.create_task(
+        asyncio.to_thread(send_email_sync, subject, plain, html, CONTACT_EMAIL)
+    )
+    return lead
+
+
+@api_router.get("/leads", response_model=List[Lead])
+async def list_leads():
+    docs = (
+        await db.lead_submissions.find({}, {"_id": 0})
+        .sort("created_at", -1)
+        .to_list(500)
+    )
+    for d in docs:
+        if isinstance(d.get("created_at"), str):
+            d["created_at"] = datetime.fromisoformat(d["created_at"])
+    return docs
+
 
 
 # --- Payments ---

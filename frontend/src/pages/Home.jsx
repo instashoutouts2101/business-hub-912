@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Ticker from "../components/Ticker";
 import AnimatedChartBg from "../components/AnimatedChartBg";
+import LeadForm from "../components/LeadForm";
 import {
     TrendingUp,
     BarChart3,
@@ -292,39 +293,8 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* CTA */}
-            <section className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
-                <div
-                    className="relative overflow-hidden border border-[#2A2E39] bg-[#131722] p-10 lg:p-16"
-                    data-testid="cta-section"
-                >
-                    <div className="absolute inset-0 gs-grid-bg opacity-40" />
-                    <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                        <div className="lg:col-span-8">
-                            <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-white tracking-tighter">
-                                Ready to run your money
-                                <br />
-                                like a professional desk?
-                            </h2>
-                            <p className="mt-4 text-[#8A919E] max-w-xl">
-                                Book a 30-minute discovery call. We&apos;ll review
-                                your positions and outline what a Globen
-                                blueprint would look like for you.
-                            </p>
-                        </div>
-                        <div className="lg:col-span-4 flex lg:justify-end">
-                            <Link
-                                to="/contact"
-                                data-testid="cta-book-call"
-                                className="btn-sharp inline-flex items-center gap-2 bg-[#00C805] hover:bg-[#00E006] text-black font-semibold px-6 py-3.5"
-                            >
-                                Book Discovery Call
-                                <ArrowRight className="w-4 h-4" />
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            {/* LEAD FORM (replaces old CTA) */}
+            <LeadForm />
         </div>
     );
 }
