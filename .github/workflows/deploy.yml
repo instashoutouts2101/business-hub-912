@@ -28,11 +28,11 @@ jobs:
 
       - name: Install dependencies
         working-directory: frontend
-        run: npm install --legacy-peer-deps
+        run: yarn install --network-timeout 300000
 
       - name: Build
         working-directory: frontend
-        run: npm run build
+        run: yarn build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
