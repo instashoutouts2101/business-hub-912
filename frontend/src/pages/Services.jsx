@@ -1,7 +1,5 @@
-import { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
-import { api } from "../lib/api";
-import { toast } from "sonner";
+import { useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
     LineChart,
     PieChart,
@@ -111,55 +109,9 @@ const PLAN_FEATURES = {
         "Direct line to lead analyst",
     ],
 };
-
+const PLAN_DATA = { signals_starter: { id: "signals_starter", name: "Starter", description: "For traders just getting started with signals.", amount: 29, currency: "usd", }, signals_pro: { id: "signals_pro", name: "Pro", description: "Our most popular plan for active traders.", amount: 79, currency: "usd", }, signals_premium: { id: "signals_premium", name: "Premium", description: "Full access with personalized support.", amount: 149, currency: "usd", }, };
 export default function Services() {
-    const [plans, setPlans] = useState([]);
-    const [loadingId, setLoadingId] = useState(null);
-    const [showPlans, setShowPlans] = useState(false);
-    const [preselect, setPreselect] = useState(null);
-    const plansRef = useRef(null);
-
-    useEffect(() => {
-        api.get("/services/packages")
-            .then((res) => {
-                const all = res.data.packages || [];
-                setPlans(
-                    PLAN_IDS.map((id) => all.find((p) => p.id === id)).filter(Boolean),
-                );
-            })
-            .catch(() => toast.error("Failed to load plans"));
-    }, []);
-
-    const requestAccess = (planId) => {
-        setShowPlans(true);
-        setPreselect(planId);
-        // Scroll after the section is rendered
-        setTimeout(() => {
-            plansRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 60);
-    };
-
-    const buy = async (planId) => {
-        try {
-            setLoadingId(planId);
-            const origin = window.location.origin;
-            const res = await api.post("/payments/checkout/session", {
-                package_id: planId,
-                origin_url: origin,
-            });
-            if (res.data?.url) {
-                window.location.href = res.data.url;
-            } else {
-                toast.error("Could not start checkout");
-            }
-        } catch (e) {
-            const detail =
-                e?.response?.data?.detail || e?.message || "Payment error";
-            toast.error(String(detail));
-        } finally {
-            setLoadingId(null);
-        }
-    };
+    const [plans] = useState(PLAN_IDS.map((id) => PLAN_DATA[id])); const [showPlans, setShowPlans] = useState(false); const [preselect, setPreselect] = useState(null); const plansRef = useRef(null); const navigate = useNavigate(); const requestAccess = (planId) => { setShowPlans(true); setPreselect(planId); setTimeout(() => { plansRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60); }; const buy = (planId) => { navigate(`/contact?plan=${planId}`); };
     return (
         <div data-testid="services-page">
             {/* Header */}
@@ -421,29 +373,7 @@ export default function Services() {
                                                 </li>
                                             ))}
                                         </ul>
-                                        <button
-                                            type="button"
-                                            data-testid={`buy-plan-${p.id}`}
-                                            disabled={loadingId === p.id}
-                                            onClick={() => buy(p.id)}
-                                            className={`btn-sharp mt-8 inline-flex items-center justify-center gap-2 px-4 py-3.5 font-semibold ${
-                                                featured
-                                                    ? "bg-[#00C805] hover:bg-[#00E006] text-black"
-                                                    : "bg-[#26A69A] hover:bg-[#4DB6AC] text-black"
-                                            } disabled:opacity-60`}
-                                        >
-                                            {loadingId === p.id ? (
-                                                <>
-                                                    <Loader2 className="w-4 h-4 animate-spin" />
-                                                    Redirecting…
-                                                </>
-                                            ) : (
-                                                <>
-                                                    Subscribe
-                                                    <ArrowRight className="w-4 h-4" />
-                                                </>
-                                            )}
-                                        </button>
+                                        <button type="button" data-testid={`buy-plan-${p.id}`} onClick={() => buy(p.id)} className={`btn-sharp mt-8 inline-flex items-center justify-center gap-2 px-4 py-3.5 font-semibold ${ featured ? "bg-[#00C805] hover:bg-[#00E006] text-black" : "bg-[#26A69A] hover:bg-[#4DB6AC] text-black" }`} > Subscribe <ArrowRight className="w-4 h-4" /> </button>
                                     </div>
                                 );
                             })}
