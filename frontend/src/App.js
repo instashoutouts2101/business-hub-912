@@ -31,7 +31,7 @@ function NotFound() {
 function App() {
     return (
         <div className="App">
-            <BrowserRouter>
+            <BrowserRouter basename="/business-hub-912">
                 <Layout>
                     <Routes>
                         <Route path="/" element={<Home />} />
