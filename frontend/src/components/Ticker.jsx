@@ -1,25 +1,64 @@
+import { useState, useEffect } from "react";
 import Marquee from "react-fast-marquee";
 
-const TICKERS = [
-    { s: "AAPL", p: 232.45, c: +1.32 },
-    { s: "MSFT", p: 421.9, c: +0.65 },
-    { s: "NVDA", p: 138.72, c: +2.41 },
-    { s: "TSLA", p: 267.51, c: -1.08 },
-    { s: "SPY", p: 585.16, c: +0.32 },
-    { s: "BTC", p: 96341.2, c: +1.85 },
-    { s: "ETH", p: 3489.7, c: -0.42 },
-    { s: "GOLD", p: 2678.4, c: +0.18 },
-    { s: "USDJPY", p: 154.83, c: -0.21 },
-    { s: "TLT", p: 89.14, c: +0.44 },
-    { s: "META", p: 618.02, c: +0.98 },
-    { s: "AMZN", p: 224.19, c: +1.11 },
+const SYMBOL_MAP = [
+    { display: "AAPL", query: "AAPL" },
+    { display: "MSFT", query: "MSFT" },
+    { display: "NVDA", query: "NVDA" },
+    { display: "TSLA", query: "TSLA" },
+    { display: "SPY", query: "SPY" },
+    { display: "BTC", query: "BTC/USD" },
+    { display: "ETH", query: "ETH/USD" },
+    { display: "GOLD", query: "XAU/USD" },
+    { display: "USDJPY", query: "USD/JPY" },
+    { display: "TLT", query: "TLT" },
+    { display: "META", query: "META" },
+    { display: "AMZN", query: "AMZN" },
 ];
 
+const API_KEY = "ab41de15b33e4369bc438183856a40a8";
+
 export default function Ticker() {
+    const [tickers, setTickers] = useState([]);
+
+    useEffect(() => {
+        const fetchPrices = async () => {
+            try {
+                const symbols = SYMBOL_MAP.map((t) => t.query).join(",");
+                const res = await fetch(
+                    `https://api.twelvedata.com/quote?symbol=${symbols}&apikey=${API_KEY}`
+                );
+                const data = await res.json();
+
+                const updated = SYMBOL_MAP.map(({ display, query }) => {
+                    const info = SYMBOL_MAP.length > 1 ? data[query] : data;
+                    if (!info || !info.close) return null;
+                    return {
+                        s: display,
+                        p: parseFloat(info.close),
+                        c: parseFloat(info.percent_change),
+                    };
+                }).filter(Boolean);
+
+                if (updated.length > 0) {
+                    setTickers(updated);
+                }
+            } catch (err) {
+                console.error("Failed to fetch ticker prices", err);
+            }
+        };
+
+        fetchPrices();
+        const interval = setInterval(fetchPrices, 60000);
+        return () => clearInterval(interval);
+    }, []);
+
+    if (tickers.length === 0) return null;
+
     return (
         <div className="gs-ticker py-2.5 text-[13px] font-mono-num" data-testid="ticker-tape">
             <Marquee gradient={false} speed={40} pauseOnHover>
-                {TICKERS.map((t, i) => {
+                {tickers.map((t, i) => {
                     const up = t.c >= 0;
                     return (
                         <div
