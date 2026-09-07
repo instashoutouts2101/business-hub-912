@@ -17,7 +17,7 @@ export default function Ticker() {
                 { proName: "OANDA:XAGUSD", title: "SILVER" },
                 { proName: "OANDA:GBPUSD", title: "GBPUSD" },
                 { proName: "OANDA:EURUSD", title: "EURUSD" },
-                { proName: "NASDAQ:IXIC", title: "NASDAQ" },
+                { proName: "TVC:DJI", title: "US30" },
                 { proName: "TVC:USOIL", title: "OIL" },
             ],
             showSymbolLogo: false,
