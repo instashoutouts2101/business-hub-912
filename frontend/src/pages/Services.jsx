@@ -109,7 +109,7 @@ const PLAN_FEATURES = {
         "Direct line to lead analyst",
     ],
 };
-const PLAN_DATA = { signals_starter: { id: "signals_starter", name: "Starter", description: "For traders just getting started with signals.", amount: 250, currency: "usd", }, signals_pro: { id: "signals_pro", name: "Pro", description: "Our most popular plan for active traders.", amount: 350, currency: "usd", }, signals_premium: { id: "signals_premium", name: "Premium", description: "Full access with personalized support.", amount: 350, currency: "usd", }, };
+const PLAN_DATA = { signals_starter: { id: "signals_starter", name: "Starter", description: "For traders just getting started with signals.", amount: 250, currency: "usd", }, signals_pro: { id: "signals_pro", name: "Pro", description: "Our most popular plan for active traders.", amount: 350, currency: "usd", }, signals_premium: { id: "signals_premium", name: "Premium", description: "Full access with personalized support.", amount: 450, currency: "usd", }, };
 export default function Services() {
     const [plans] = useState(PLAN_IDS.map((id) => PLAN_DATA[id])); const [showPlans, setShowPlans] = useState(false); const [preselect, setPreselect] = useState(null); const plansRef = useRef(null); const navigate = useNavigate(); const requestAccess = (planId) => { setShowPlans(true); setPreselect(planId); setTimeout(() => { plansRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60); }; const buy = (planId) => { navigate(`/contact?plan=${planId}`); };
     return (
