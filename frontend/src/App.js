@@ -32,6 +32,7 @@ function App() {
     return (
         <div className="App">
             <BrowserRouter basename="/business-hub-912">
+        <ScrollToTop />
                 <Layout>
                     <Routes>
                         <Route path="/" element={<Home />} />
