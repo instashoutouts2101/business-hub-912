@@ -25,7 +25,7 @@ export default function Contact() {
             setSubmitting(true);
             await window.emailjs.send(
                 "service_23qyqtk",
-                "template_a101eje",
+                "template_vtr7ctj",
                 {
                     name: form.name.trim(),
                     email: form.email.trim(),
