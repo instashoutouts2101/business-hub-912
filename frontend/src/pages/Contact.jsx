@@ -16,7 +16,7 @@ export default function Contact() {
 
     const update = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-    const submit = async (e) => {
+        const submit = async (e) => {
         e.preventDefault();
         if (!form.name || !form.email || !form.message) {
             toast.error("Please fill in name, email and message.");
@@ -24,20 +24,23 @@ export default function Contact() {
         }
         try {
             setSubmitting(true);
-            await api.post("/contact", {
-                name: form.name.trim(),
-                email: form.email.trim(),
-                phone: form.phone.trim() || undefined,
-                subject: form.subject.trim() || undefined,
-                message: form.message.trim(),
-            });
+            await window.emailjs.send(
+                "service_23qyqtk",
+                "template_a101eje",
+                {
+                    name: form.name.trim(),
+                    email: form.email.trim(),
+                    phone: form.phone.trim() || "Not provided",
+                    subject: form.subject.trim() || "Not provided",
+                    message: form.message.trim(),
+                },
+                "ltFDopj11WBYfU3e0"
+            );
             setSent(true);
             toast.success("Message received. We'll be in touch shortly.");
             setForm({ name: "", email: "", phone: "", subject: "", message: "" });
         } catch (err) {
-            const detail =
-                err?.response?.data?.detail || err?.message || "Failed to send";
-            toast.error(String(detail));
+            toast.error("Failed to send. Please try again.");
         } finally {
             setSubmitting(false);
         }
