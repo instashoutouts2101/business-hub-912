@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { api } from "../lib/api";
 import { toast } from "sonner";
 import { Loader2, Send, CheckCircle2 } from "lucide-react";
 
@@ -18,24 +17,25 @@ export default function LeadForm() {
         }
         try {
             setLoading(true);
-            await api.post("/leads", {
-                name: form.name.trim(),
-                email: form.email.trim(),
-                whatsapp: form.whatsapp.trim(),
-            });
+                        await window.emailjs.send(
+                "service_23qyqtk",
+                "template_a101eje",
+                {
+                    name: form.name.trim(),
+                    email: form.email.trim(),
+                    phone: form.whatsapp.trim(),
+                    subject: "Discovery Call Request",
+                    message: "This person requested a discovery call. Please reach out on WhatsApp within one business day.",
+                },
+                "ltFDopj11WBYfU3e0"
+            );
             setDone(true);
             toast.success("Received. We'll be in touch on WhatsApp shortly.");
             setForm({ name: "", email: "", whatsapp: "" });
         } catch (err) {
-            const detail =
-                err?.response?.data?.detail?.[0]?.msg ||
-                err?.response?.data?.detail ||
-                err?.message ||
-                "Submission failed";
-            toast.error(String(detail));
+            toast.error("Submission failed. Please try again.");
         } finally {
             setLoading(false);
-        }
     };
 
     return (
