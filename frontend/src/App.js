@@ -8,7 +8,7 @@ import About from "@/pages/About";
 import Services from "@/pages/Services";
 import Contact from "@/pages/Contact";
 import PaymentSuccess from "@/pages/PaymentSuccess";
-
+import ScrollToTop from "@/components/ScrollToTop";
 function NotFound() {
     return (
         <div
