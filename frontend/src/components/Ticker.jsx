@@ -2,18 +2,14 @@ import { useState, useEffect } from "react";
 import Marquee from "react-fast-marquee";
 
 const SYMBOL_MAP = [
-    { display: "AAPL", query: "AAPL" },
-    { display: "MSFT", query: "MSFT" },
-    { display: "NVDA", query: "NVDA" },
-    { display: "TSLA", query: "TSLA" },
-    { display: "SPY", query: "SPY" },
-    { display: "BTC", query: "BTC/USD" },
-    { display: "ETH", query: "ETH/USD" },
     { display: "GOLD", query: "XAU/USD" },
     { display: "USDJPY", query: "USD/JPY" },
-    { display: "TLT", query: "TLT" },
-    { display: "META", query: "META" },
-    { display: "AMZN", query: "AMZN" },
+    { display: "BTC", query: "BTC/USD" },
+    { display: "SILVER", query: "XAG/USD" },
+    { display: "GBPUSD", query: "GBP/USD" },
+    { display: "EURUSD", query: "EUR/USD" },
+    { display: "NASDAQ", query: "IXIC" },
+    { display: "OIL", query: "WTI/USD" },
 ];
 
 const API_KEY = "ab41de15b33e4369bc438183856a40a8";
