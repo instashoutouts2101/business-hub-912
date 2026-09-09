@@ -32,28 +32,28 @@ const VALUES = [
 ]; 
 const TEAM = [
     {
+        initials: "SC",
+        name: "Sarika Chaturvedi",
+        role: "Director",
+        bio: "Oversees firm-wide strategy and governance, ensuring every mandate meets the same fiduciary standard.",
+    },
+    {
         initials: "JW",
-        name: "James Whitfield",
+        name: "Jason Webber",
         role: "Research Head",
         bio: "Nine years specialising in forex, commodity and index markets; leads the desk's technical and macro research.",
+    },
+    {
+        initials: "SH",
+        name: "Sarah Harper",
+        role: "Operations Head",
+        bio: "Runs day-to-day execution, compliance and reporting infrastructure across the firm.",
     },
     {
         initials: "EH",
         name: "Eleanor Hartley",
         role: "Sales Head",
         bio: "Former private-bank relationship director; built Globen's client acquisition and advisory pipeline.",
-    },
-    {
-        initials: "OB",
-        name: "Oliver Bancroft",
-        role: "Operations Head",
-        bio: "Runs day-to-day execution, compliance and reporting infrastructure across the firm.",
-    },
-    {
-        initials: "SC",
-        name: "Sarika Chaturvedi",
-        role: "Director",
-        bio: "Oversees firm-wide strategy and governance, ensuring every mandate meets the same fiduciary standard.",
     },
 ];
 
