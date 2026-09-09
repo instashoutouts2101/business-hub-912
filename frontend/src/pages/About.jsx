@@ -29,6 +29,32 @@ const VALUES = [
         title: "Long-term orientation",
         text: "Great returns compound over decades. We optimise for the horizon that matters.",
     },
+]; 
+const TEAM = [
+    {
+        initials: "JW",
+        name: "James Whitfield",
+        role: "Research Head",
+        bio: "Nine years specialising in forex, commodity and index markets; leads the desk's technical and macro research.",
+    },
+    {
+        initials: "EH",
+        name: "Eleanor Hartley",
+        role: "Sales Head",
+        bio: "Former private-bank relationship director; built Globen's client acquisition and advisory pipeline.",
+    },
+    {
+        initials: "OB",
+        name: "Oliver Bancroft",
+        role: "Operations Head",
+        bio: "Runs day-to-day execution, compliance and reporting infrastructure across the firm.",
+    },
+    {
+        initials: "SC",
+        name: "Sarika Chaturvedi",
+        role: "Director",
+        bio: "Oversees firm-wide strategy and governance, ensuring every mandate meets the same fiduciary standard.",
+    },
 ];
 
 export default function About() {
@@ -116,6 +142,40 @@ export default function About() {
                     ))}
                 </div>
             </section>
+            {/* LEADERSHIP */}
+<section
+    data-testid="about-leadership"
+    className="max-w-7xl mx-auto px-6 lg:px-10 py-24"
+>
+    <div className="text-xs uppercase tracking-widest text-[#00C805]">
+        Leadership
+    </div>
+    <h2 className="mt-3 font-display font-black text-3xl sm:text-4xl lg:text-5xl text-white tracking-tighter">
+        The senior <span className="italic text-[#26A69A]">bench</span>
+    </h2>
+
+    <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        {TEAM.map((m, i) => (
+            <div key={m.name} data-testid={`team-${i}`}>
+                <div className="border-t border-[#2A2E39]" />
+                <div className="w-16 h-16 -mt-8 mb-6 rounded-full border border-[#2A2E39] bg-[#0B0E14] flex items-center justify-center">
+                    <span className="font-display italic text-[#26A69A] text-lg">
+                        {m.initials}
+                    </span>
+                </div>
+                <h3 className="font-display font-extrabold text-xl text-white tracking-tight">
+                    {m.name}
+                </h3>
+                <div className="mt-1 text-xs uppercase tracking-widest text-[#8A919E]">
+                    {m.role}
+                </div>
+                <p className="mt-4 text-sm text-[#D1D4DC] leading-relaxed">
+                    {m.bio}
+                </p>
+            </div>
+        ))}
+    </div>
+</section>
 
             {/* VALUES */}
             <section
