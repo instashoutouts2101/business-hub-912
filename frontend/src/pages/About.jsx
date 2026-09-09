@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import AnimatedNumber from "../components/AnimatedNumber";
 import {
     Target,
     Shield,
@@ -126,14 +127,14 @@ export default function About() {
             >
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-[#2A2E39] border border-[#2A2E39]">
                     {[
-                        { k: "80%", v: "Client Success" },
-                        { k: "2,500+", v: "Advices Given" },
-                        { k: "13K", v: "Signals Provided" },
-                        { k: "7 yrs", v: "Combined Experience" },
-                    ].map((s) => (
-                        <div key={s.v} className="bg-[#0B0E14] p-8">
+    { target: 80, suffix: "%", v: "Client Success" },
+    { target: 2500, suffix: "+", v: "Advices Given", format: true },
+    { target: 13, suffix: "K", v: "Signals Provided" },
+    { target: 7, suffix: " yrs", v: "Combined Experience" },
+].map((s) => (
+                                          <div key={s.v} className="bg-[#0B0E14] p-8">
                             <div className="font-display font-black text-3xl sm:text-4xl text-white font-mono-num tracking-tight">
-                                {s.k}
+                               <AnimatedNumber target={s.target} suffix={s.suffix} format={s.format} />
                             </div>
                             <div className="mt-2 text-xs uppercase tracking-widest text-[#8A919E]">
                                 {s.v}
