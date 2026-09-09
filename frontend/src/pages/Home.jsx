@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Ticker from "../components/Ticker";
 import AnimatedChartBg from "../components/AnimatedChartBg";
 import LeadForm from "../components/LeadForm";
+import AnimatedNumber from "../components/AnimatedNumber";
 import {
     TrendingUp,
     BarChart3,
@@ -13,10 +14,10 @@ import {
 } from "lucide-react";
 
 const STATS = [
-    { k: "80%", v: "Client Success", tid: "stat-success" },
-    { k: "2,500+", v: "Advices Given", tid: "stat-advices" },
-    { k: "13K", v: "Signals Provided", tid: "stat-signals" },
-    { k: "7 yrs", v: "Combined Experience", tid: "stat-exp" },
+    { target: 80, suffix: "%", v: "Client Success", tid: "stat-success" },
+    { target: 2500, suffix: "+", v: "Advices Given", tid: "stat-advices", format: true },
+    { target: 13, suffix: "K", v: "Signals Provided", tid: "stat-signals" },
+    { target: 7, suffix: " yrs", v: "Combined Experience", tid: "stat-exp" },
 ];
 
 const SERVICE_PREVIEWS = [
@@ -172,7 +173,7 @@ export default function Home() {
                             style={{ animationDelay: `${i * 60}ms` }}
                         >
                             <div className="font-display font-black text-3xl sm:text-4xl text-white font-mono-num tracking-tight">
-                                {s.k}
+                               <AnimatedNumber target={s.target} suffix={s.suffix} format={s.format} />
                             </div>
                             <div className="mt-2 text-xs uppercase tracking-widest text-[#8A919E]">
                                 {s.v}
